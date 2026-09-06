@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +33,6 @@
       border: 1px solid rgba(255,255,255,0.02);
     }
 
-    /* HEADER */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -73,7 +73,6 @@
     }
     .security-badge .lock { font-size: 16px; }
 
-    /* FILTER BAR */
     .filter-bar {
       display: flex;
       gap: 12px;
@@ -120,7 +119,6 @@
       color: #fbbf24;
     }
 
-    /* TITLE */
     .page-title {
       margin: 0 0 4px;
       color: #f0f4ff;
@@ -139,7 +137,6 @@
       padding-left: 16px;
     }
 
-    /* CARD GRID */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -256,7 +253,6 @@
       transform: none;
     }
 
-    /* SOLD OUT STYLES */
     .card-item.sold-out {
       opacity: 0.6;
       pointer-events: none;
@@ -307,7 +303,6 @@
       border: 1px solid rgba(255,255,255,0.02);
     }
 
-    /* STATUS VARIATIONS */
     .card-item.low-stock .card-badge {
       color: #f87171;
       border-color: rgba(248,113,113,0.1);
@@ -345,7 +340,6 @@
       color: #6a7fa0;
     }
 
-    /* DISCLAIMER */
     .disclaimer-section {
       margin-top: 45px;
       padding-top: 30px;
@@ -373,7 +367,6 @@
       font-weight: 400;
     }
 
-    /* QR MODAL */
     .qr-modal {
       display: none;
       position: fixed;
@@ -530,7 +523,6 @@
       margin-right: 12px;
     }
 
-    /* CARD REVEAL */
     .card-reveal {
       background: rgba(255,255,255,0.02);
       border-radius: 20px;
@@ -606,7 +598,6 @@
 
     .hidden { display: none !important; }
 
-    /* RESPONSIVE */
     @media (max-width: 600px) {
       #app { padding: 16px 14px 24px; border-radius: 28px; }
       .brand h1 { font-size: 24px; }
@@ -631,7 +622,6 @@
 
 <div id="app">
 
-  <!-- HEADER -->
   <div class="top-bar">
     <div class="brand">
       <h1>✦ <span>CARD</span>VAULT</h1>
@@ -642,7 +632,6 @@
     </div>
   </div>
 
-  <!-- FILTER BAR -->
   <div class="filter-bar">
     <span class="filter-label">🔍 Filter:</span>
     <button class="filter-btn active" data-filter="all">All <span class="count" id="countAll">0</span></button>
@@ -650,7 +639,6 @@
     <button class="filter-btn" data-filter="sold">❌ Sold Out <span class="count" id="countSold">0</span></button>
   </div>
 
-  <!-- TITLE -->
   <div class="page-title">
     🎴 Premium Gift <span>Cards</span>
   </div>
@@ -658,10 +646,8 @@
     Browse available cards • Click "Buy Now" to purchase
   </div>
 
-  <!-- CARD GRID -->
   <div class="cards-grid" id="cardsGrid"></div>
 
-  <!-- DISCLAIMER -->
   <div class="disclaimer-section">
     <div class="disclaimer-title">⏤ legal & disclaimer</div>
     <div class="disclaimer-text">
@@ -676,10 +662,8 @@
 
 </div>
 
-<!-- QR MODAL -->
 <div id="qrModal" class="qr-modal">
   <div class="qr-box" id="qrBox">
-    <!-- Step 1: QR & Payment -->
     <div id="stepPayment">
       <div class="qr-head">💳 scan to pay</div>
       <div class="qr-sub">complete your purchase</div>
@@ -690,7 +674,6 @@
       <button class="close-qr" id="closeQrBtn">close</button>
     </div>
 
-    <!-- Step 2: Payment Confirmation -->
     <div id="stepConfirm" class="hidden">
       <div class="qr-head">📋 Confirm Payment</div>
       <div class="qr-sub">enter your payment details</div>
@@ -709,7 +692,6 @@
       <button class="btn-secondary" id="backBtn">← Back</button>
     </div>
 
-    <!-- Step 3: Verification & Card Reveal -->
     <div id="stepReveal" class="hidden">
       <div class="qr-head">✅ Payment Verified!</div>
       <div class="qr-status verified">🔓 card unlocked</div>
@@ -733,47 +715,30 @@
 </div>
 
 <script>
-  // ----- GENERATE RANDOM CARDS -----
-  function generateCards(count = 16) {
-    const cards = [];
-    const names = ['Platinum', 'Gold', 'Silver', 'Diamond', 'Premium', 'Ultra', 'Pro', 'Elite', 'Prime', 'Select', 'VIP', 'Royal', 'Titanium', 'Onyx', 'Sapphire', 'Emerald'];
-    const prices = [199, 299, 399, 499, 699, 799, 899, 999, 1299, 1499, 1799, 2099, 2499, 2999, 3499, 3999];
-    const values = [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 6000, 7000, 8000, 9000, 10000, 12000, 15000];
-
-    for (let i = 0; i < count; i++) {
-      const name = names[Math.floor(Math.random() * names.length)] + ' Card';
-      const price = prices[Math.floor(Math.random() * prices.length)];
-      const value = values[Math.floor(Math.random() * values.length)];
-      const isLowStock = Math.random() < 0.12;
-      const isPopular = Math.random() < 0.12;
-      // 20% chance of being sold out
-      const isSoldOut = Math.random() < 0.20;
-
-      // Generate random card number: 16 digits
-      const cardNum = '4' + String(Math.floor(100000000000000 + Math.random() * 900000000000000)).padStart(15, '0');
-      const masked = cardNum.slice(0, 6) + ' •••• •••• ' + cardNum.slice(-4);
-      const cvv = String(Math.floor(100 + Math.random() * 900));
-      const expiry = `${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}/${String(24 + Math.floor(Math.random() * 5))}`;
-
-      cards.push({
-        id: i + 1,
-        name: name,
-        price: price,
-        value: value,
-        cardNumber: cardNum,
-        masked: masked,
-        cvv: cvv,
-        expiry: expiry,
-        isLowStock: isLowStock,
-        isPopular: isPopular,
-        isSoldOut: isSoldOut,
-        used: false
-      });
-    }
-    return cards;
+  // ----- FIXED CARDS — Prices Never Change (₹299 to ₹3499) -----
+  function getFixedCards() {
+    return [
+      { id: 1, name: "Platinum Card", price: 299, value: 1200, cardNumber: "4532890123456701", masked: "453289 •••• •••• 6701", cvv: "123", expiry: "12/26", isLowStock: false, isPopular: true, isSoldOut: false, used: false },
+      { id: 2, name: "Gold Card", price: 399, value: 1600, cardNumber: "4532890123456702", masked: "453289 •••• •••• 6702", cvv: "456", expiry: "06/27", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 3, name: "Silver Card", price: 499, value: 2000, cardNumber: "4532890123456703", masked: "453289 •••• •••• 6703", cvv: "789", expiry: "09/25", isLowStock: false, isPopular: false, isSoldOut: true, used: false },
+      { id: 4, name: "Diamond Card", price: 599, value: 2500, cardNumber: "4532890123456704", masked: "453289 •••• •••• 6704", cvv: "234", expiry: "03/26", isLowStock: true, isPopular: false, isSoldOut: false, used: false },
+      { id: 5, name: "Premium Card", price: 699, value: 3000, cardNumber: "4532890123456705", masked: "453289 •••• •••• 6705", cvv: "567", expiry: "08/28", isLowStock: false, isPopular: true, isSoldOut: false, used: false },
+      { id: 6, name: "Ultra Card", price: 799, value: 3500, cardNumber: "4532890123456706", masked: "453289 •••• •••• 6706", cvv: "890", expiry: "11/26", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 7, name: "Pro Card", price: 899, value: 4000, cardNumber: "4532890123456707", masked: "453289 •••• •••• 6707", cvv: "345", expiry: "02/27", isLowStock: false, isPopular: false, isSoldOut: true, used: false },
+      { id: 8, name: "Elite Card", price: 999, value: 4500, cardNumber: "4532890123456708", masked: "453289 •••• •••• 6708", cvv: "678", expiry: "07/26", isLowStock: true, isPopular: false, isSoldOut: false, used: false },
+      { id: 9, name: "Prime Card", price: 1199, value: 5000, cardNumber: "4532890123456709", masked: "453289 •••• •••• 6709", cvv: "901", expiry: "10/25", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 10, name: "Select Card", price: 1399, value: 5500, cardNumber: "4532890123456710", masked: "453289 •••• •••• 6710", cvv: "234", expiry: "05/27", isLowStock: false, isPopular: true, isSoldOut: false, used: false },
+      { id: 11, name: "VIP Card", price: 1599, value: 6500, cardNumber: "4532890123456711", masked: "453289 •••• •••• 6711", cvv: "567", expiry: "09/28", isLowStock: false, isPopular: false, isSoldOut: true, used: false },
+      { id: 12, name: "Royal Card", price: 1799, value: 7500, cardNumber: "4532890123456712", masked: "453289 •••• •••• 6712", cvv: "890", expiry: "12/27", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 13, name: "Titanium Card", price: 1999, value: 8500, cardNumber: "4532890123456713", masked: "453289 •••• •••• 6713", cvv: "123", expiry: "04/26", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 14, name: "Onyx Card", price: 2199, value: 9500, cardNumber: "4532890123456714", masked: "453289 •••• •••• 6714", cvv: "456", expiry: "08/27", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 15, name: "Sapphire Card", price: 2599, value: 11000, cardNumber: "4532890123456715", masked: "453289 •••• •••• 6715", cvv: "789", expiry: "01/28", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 16, name: "Emerald Card", price: 2999, value: 13000, cardNumber: "4532890123456716", masked: "453289 •••• •••• 6716", cvv: "901", expiry: "06/26", isLowStock: false, isPopular: false, isSoldOut: false, used: false },
+      { id: 17, name: "Onyx Elite Card", price: 3499, value: 15000, cardNumber: "4532890123456717", masked: "453289 •••• •••• 6717", cvv: "234", expiry: "03/27", isLowStock: false, isPopular: true, isSoldOut: false, used: false }
+    ];
   }
 
-  let cardData = generateCards(16);
+  let cardData = getFixedCards();
   let currentFilter = 'all';
   let currentCard = null;
   let isVerified = false;
@@ -789,7 +754,6 @@
   const closeQrBtn = document.getElementById('closeQrBtn');
   const closeQrBtn2 = document.getElementById('closeQrBtn2');
 
-  // Step refs
   const stepPayment = document.getElementById('stepPayment');
   const stepConfirm = document.getElementById('stepConfirm');
   const stepReveal = document.getElementById('stepReveal');
@@ -804,7 +768,6 @@
   const copyBtn = document.getElementById('copyBtn');
   const usedBtn = document.getElementById('usedBtn');
 
-  // Filter buttons
   const filterBtns = document.querySelectorAll('.filter-btn');
   const countAll = document.getElementById('countAll');
   const countAvailable = document.getElementById('countAvailable');
@@ -820,7 +783,6 @@
       filtered = filtered.filter(c => c.isSoldOut);
     }
 
-    // Update counts
     const allCards = cardData.filter(c => !c.used);
     const availCards = allCards.filter(c => !c.isSoldOut);
     const soldCards = allCards.filter(c => c.isSoldOut);
@@ -872,12 +834,10 @@
     currentCard = card;
     isVerified = false;
 
-    // Reset steps
     stepPayment.classList.remove('hidden');
     stepConfirm.classList.add('hidden');
     stepReveal.classList.add('hidden');
 
-    // Set data
     qrPrice.textContent = card.price;
     qrCardName.textContent = card.name;
     qrImage.src = 'qr-placeholder.png?t=' + Date.now();
@@ -886,33 +846,28 @@
     paidBtn.disabled = false;
     paidBtn.textContent = '✅ I Have Paid';
 
-    // Reset form
     utrInput.value = '';
     screenshotInput.value = '';
 
     qrModal.classList.add('open');
   }
 
-  // ----- CLOSE MODAL -----
   function closeModal() {
     qrModal.classList.remove('open');
     currentCard = null;
   }
 
-  // ----- PAID BUTTON -----
   paidBtn.addEventListener('click', function() {
     if (!currentCard) return;
     stepPayment.classList.add('hidden');
     stepConfirm.classList.remove('hidden');
   });
 
-  // ----- BACK BUTTON -----
   backBtn.addEventListener('click', function() {
     stepConfirm.classList.add('hidden');
     stepPayment.classList.remove('hidden');
   });
 
-  // ----- VERIFY BUTTON -----
   verifyBtn.addEventListener('click', function() {
     const utr = utrInput.value.trim();
     const file = screenshotInput.files[0];
@@ -926,17 +881,14 @@
       return;
     }
 
-    // Simulate verification
     verifyBtn.disabled = true;
     verifyBtn.innerHTML = '<span class="spinner"></span> Verifying...';
 
     setTimeout(() => {
-      // Verification successful
       isVerified = true;
       stepConfirm.classList.add('hidden');
       stepReveal.classList.remove('hidden');
 
-      // Reveal card details
       fullCardNumber.textContent = currentCard.cardNumber;
       fullCvv.textContent = currentCard.cvv;
       fullExpiry.textContent = currentCard.expiry;
@@ -945,7 +897,6 @@
       verifyBtn.disabled = false;
       verifyBtn.innerHTML = '🔍 Verify Payment';
 
-      // Mark card as used and sold out
       currentCard.used = true;
       currentCard.isSoldOut = true;
       renderCards(currentFilter);
@@ -953,7 +904,6 @@
     }, 2500);
   });
 
-  // ----- COPY BUTTON -----
   copyBtn.addEventListener('click', function() {
     if (!currentCard) return;
     const text = `Card: ${currentCard.cardNumber}\nCVV: ${currentCard.cvv}\nExp: ${currentCard.expiry}\nValue: ₹${currentCard.value}`;
@@ -965,14 +915,12 @@
     });
   });
 
-  // ----- USED BUTTON -----
   usedBtn.addEventListener('click', function() {
     if (!currentCard) return;
     alert('✅ Card marked as used.');
     closeModal();
   });
 
-  // ----- BUY HANDLER (delegation) -----
   container.addEventListener('click', function(e) {
     const btn = e.target.closest('.buy-btn');
     if (!btn) return;
@@ -983,7 +931,6 @@
     openModal(card);
   });
 
-  // ----- FILTER HANDLER -----
   filterBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       filterBtns.forEach(b => b.classList.remove('active'));
@@ -993,14 +940,12 @@
     });
   });
 
-  // ----- CLOSE EVENTS -----
   closeQrBtn.addEventListener('click', closeModal);
   closeQrBtn2.addEventListener('click', closeModal);
   qrModal.addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
 
-  // ----- INIT -----
   renderCards('all');
 
   console.log('🃏 Card Vault loaded — ' + cardData.filter(c => !c.used && !c.isSoldOut).length + ' cards available');
@@ -1008,3 +953,4 @@
 
 </body>
 </html>
+```
